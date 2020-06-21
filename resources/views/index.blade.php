@@ -19,36 +19,51 @@
       </ul>
     </div>
   </nav>
-  <div class="container mx-auto px-4 py-16 flex flex-col md:flex-row">
+
+  @if (isset($response) && $response)
+  <div class="mt-16 text-center">
+    <div class="p-2">
+      <div class="inline-flex items-center bg-gray-800 leading-none text-{{ $response['colour'] }}-600 rounded-full p-2 shadow text-teal text-sm">
+        <span class="inline-flex bg-{{ $response['colour'] }}-600 text-white rounded-full h-6 px-3 justify-center items-center">{{ $response['title'] }}</span>
+        <span class="inline-flex px-2">{{ $response['subtitle'] }}</span>
+      </div>
+    </div>
+  </div>
+  @endif
+
+  <div class="container mx-auto px-4 py-16 flex flex-col md:flex-row h-auto">
+
     <div class="encrypt w-1/2 sm:w-full md:w-full lg:w-32 xl:w-3/4">
       <h2 class="uppercase tracking-wider text-orange-500 text-lg font-semibold">Encrypt</h2>
       <p>Encrypt some text. The result shown will be a Bcrypt encrypted hash.</p>
       <form class="my-4" method="POST" action="/">
         @csrf
         <div>
-          <input class="rounded-l-lg p-4 border-t mr-0 border-b border-l border-gray-500 bg-gray-800 w-64" placeholder="String to encrypt" />
-          <button class="px-8 rounded-r-lg bg-orange-500 text-gray-800 font-bold p-4 uppercase border-orange-700 border-t border-b border-r">Encrypt</button>
+          <input name="string" class="rounded-l-lg p-4 border-t mr-0 border-b border-l border-gray-500 bg-gray-800 w-64" placeholder="String to encrypt" />
+          <button class="px-8 rounded-r-lg bg-orange-500 text-gray-800 font-bold p-4 uppercase border-orange-700 border-t border-b border-r" value="encrypt" name="action" type="submit">Encrypt</button>
         </div>
         <div class="my-4">
-          <input class="rounded-l-lg p-4 border-t mr-0 border-b border-l border-gray-500 bg-gray-800 w-64" type="number" value="12" />
+          <input class="rounded-l-lg p-4 border-t mr-0 border-b border-l border-gray-500 bg-gray-800 w-64" name="rounds" type="number" value="{{ isset($_POST['rounds']) ? $_POST['rounds'] : '12' }}" min="4" max="18" />
           <button class="px-8 rounded-r-lg bg-orange-800 text-gray-900 font-bold p-4 uppercase border-orange-800 border-t border-b border-r cursor-not-allowed" disabled>Rounds</button>
         </div>
       </form>
     </div>
+
     <div class="decypt w-1/2 sm:w-full md:w-full lg:w-32 xl:w-3/4">
       <h2 class="uppercase tracking-wider text-orange-500 text-lg font-semibold">Decrypt</h2>
       <p>Test your Bcrypt hash against some plaintext, to see if they match.</p>
       <form class="my-4" method="POST" action="/">
         @csrf
         <div>
-          <input class="rounded-lg p-4 border border-gray-500 bg-gray-800 w-64" placeholder="Hash to check" />
+          <input class="rounded-lg p-4 border border-gray-500 bg-gray-800 w-64" name="hash" type="text" placeholder="Hash to check" />
         </div>
         <div class="my-4">
-          <input class="rounded-l-lg p-4 border-t mr-0 border-b border-l border-gray-500 bg-gray-800 w-64" placeholder="String to check against" />
-          <button class="px-8 rounded-r-lg bg-orange-500 text-gray-800 font-bold p-4 uppercase border-orange-700 border-t border-b border-r">Check!</button>
+          <input name="string" class="rounded-l-lg p-4 border-t mr-0 border-b border-l border-gray-500 bg-gray-800 w-64" type="text" placeholder="String to check against" aria-label="String to check against" />
+          <button class="px-8 rounded-r-lg bg-orange-500 text-gray-800 font-bold p-4 uppercase border-orange-700 border-t border-b border-r" value="decrypt" name="action" type="submit">Check!</button>
         </div>
       </form>
     </div>
+
   </div>
   <footer class="border border-t border-gray-800">
     <div class="container mx-auto text-sm px-4 py-6">
